@@ -19,9 +19,14 @@ class ProjectEdit : StandardEditor<Project>() {
 
     @Subscribe
     fun onBeforeCommitChanges(event: BeforeCommitChangesEvent) {
+        if (editedEntity.name != null) {
+            val name: String = editedEntity.name!!
+            if (name.isEmpty() || name.length > 200)
+                showIncorrectNameSizeExceptionWarning(event)
+        } else
+            showIncorrectNameSizeExceptionWarning(event)
         if (editedEntity.startDate != null && editedEntity.endDate != null
             && editedEntity.startDate?.isBefore(editedEntity.endDate) == false) {
-            print("\nasd\n")
             showIncorrectTimeRangeExceptionWarning(event)
         }
     }
@@ -30,6 +35,15 @@ class ProjectEdit : StandardEditor<Project>() {
         notifications!!.create()
             .withCaption(messages!!.getMessage("ru.mop.screen.project/exception.IncorrectTimeRangeExceptionHeader"))
             .withDescription(messages.getMessage("ru.mop.screen.project/exception.IncorrectTimeRangeException"))
+            .withType(Notifications.NotificationType.WARNING)
+            .show()
+        event.preventCommit()
+    }
+
+    private fun showIncorrectNameSizeExceptionWarning(event: BeforeCommitChangesEvent) {
+        notifications!!.create()
+            .withCaption(messages!!.getMessage("ru.mop.screen.project/exception.IncorrectNameSizeExceptionHeader"))
+            .withDescription(messages.getMessage("ru.mop.screen.project/exception.IncorrectNameSizeException"))
             .withType(Notifications.NotificationType.WARNING)
             .show()
         event.preventCommit()

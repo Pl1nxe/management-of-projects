@@ -19,6 +19,12 @@ class TaskEdit : StandardEditor<Task>() {
 
     @Subscribe
     fun onBeforeCommitChanges(event: BeforeCommitChangesEvent) {
+        if (editedEntity.name != null) {
+            val name: String = editedEntity.name!!
+            if (name.isEmpty() || name.length > 200)
+                showIncorrectNameSizeExceptionWarning(event)
+        } else
+            showIncorrectNameSizeExceptionWarning(event)
         if (
                     (editedEntity.startDate != null && editedEntity.endDate != null
                     && editedEntity.startDate?.isBefore(editedEntity.endDate) == false)
@@ -32,12 +38,25 @@ class TaskEdit : StandardEditor<Task>() {
             )
         )
             showIncorrectTimeRangeExceptionWarning(event)
+        if (editedEntity.startDate == null)
+            editedEntity.startDate = editedEntity.project?.startDate
+        if (editedEntity.endDate == null)
+            editedEntity.endDate = editedEntity.project?.endDate
     }
 
     private fun showIncorrectTimeRangeExceptionWarning(event: BeforeCommitChangesEvent) {
         notifications!!.create()
             .withCaption(messages!!.getMessage("ru.mop.screen.task/exception.IncorrectTimeRangeExceptionHeader"))
             .withDescription(messages.getMessage("ru.mop.screen.task/exception.IncorrectTimeRangeException"))
+            .withType(Notifications.NotificationType.WARNING)
+            .show()
+        event.preventCommit()
+    }
+
+    private fun showIncorrectNameSizeExceptionWarning(event: BeforeCommitChangesEvent) {
+        notifications!!.create()
+            .withCaption(messages!!.getMessage("ru.mop.screen.task/exception.IncorrectNameSizeExceptionHeader"))
+            .withDescription(messages.getMessage("ru.mop.screen.task/exception.IncorrectNameSizeException"))
             .withType(Notifications.NotificationType.WARNING)
             .show()
         event.preventCommit()

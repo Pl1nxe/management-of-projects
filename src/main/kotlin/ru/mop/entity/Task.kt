@@ -28,9 +28,9 @@ open class Task {
     @Id
     var id: UUID? = null
 
+    @NotNull
     @InstanceName
     @Column(name = "NAME", nullable = false)
-    @NotNull
     var name: String? = null
 
     @JoinColumn(name = "ASSIGNEE_ID", nullable = false)

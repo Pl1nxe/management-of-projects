@@ -2,31 +2,18 @@
 <project version="4">
   <component name="JmixDataStoreSettingsManager">
     <moduleSettings>
-      <entry key="management-of-projects.main">
-        <ModuleSettings>
-          <option name="dataStoreOptions">
-            <map>
-              <entry key="main">
-                <value>
-                  <DataStoreSettings>
-                    <option name="supportedTypes">
-                      <option value="postgres" />
-                      <option value="hsql" />
-                    </option>
-                  </DataStoreSettings>
-                </value>
-              </entry>
-            </map>
-          </option>
-        </ModuleSettings>
-      </entry>
       <entry key="ru.management-of-projects.main">
         <ModuleSettings>
           <option name="dataStoreOptions">
             <map>
               <entry key="main">
                 <value>
-                  <DataStoreSettings />
+                  <DataStoreSettings>
+                    <option name="generateDdlType" value="CREATE_AND_UPDATE" />
+                    <option name="supportedTypes">
+                      <option value="hsql" />
+                    </option>
+                  </DataStoreSettings>
                 </value>
               </entry>
             </map>
