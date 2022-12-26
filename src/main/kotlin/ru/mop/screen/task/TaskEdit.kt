@@ -4,6 +4,7 @@ import io.jmix.core.Messages
 import io.jmix.ui.Notifications
 import io.jmix.ui.screen.*
 import org.springframework.beans.factory.annotation.Autowired
+import ru.mop.app.TaskService
 import ru.mop.entity.Task
 
 @UiController("Task_.edit")
@@ -12,36 +13,24 @@ import ru.mop.entity.Task
 class TaskEdit : StandardEditor<Task>() {
 
     @Autowired
+    private var taskService: TaskService? = null
+
+    @Autowired
     private var notifications: Notifications? = null
 
     @Autowired
     private val messages: Messages? = null
 
     @Subscribe
-    fun onBeforeCommitChanges(event: BeforeCommitChangesEvent) {
-        if (editedEntity.name != null) {
-            val name: String = editedEntity.name!!
-            if (name.isEmpty() || name.length > 200)
-                showIncorrectNameSizeExceptionWarning(event)
-        } else
-            showIncorrectNameSizeExceptionWarning(event)
-        if (
-                    (editedEntity.startDate != null && editedEntity.endDate != null
-                    && editedEntity.startDate?.isBefore(editedEntity.endDate) == false)
-            ||
-            (
-                    (editedEntity.project?.startDate != null && editedEntity.startDate != null
-                    && editedEntity.project?.startDate?.isAfter(editedEntity.startDate) == true)
-                    ||
-                    (editedEntity.project?.endDate != null && editedEntity.endDate != null
-                    && editedEntity.project?.endDate?.isBefore(editedEntity.endDate) == true)
-            )
-        )
-            showIncorrectTimeRangeExceptionWarning(event)
+    private fun onBeforeCommitChanges(event: BeforeCommitChangesEvent) {
         if (editedEntity.startDate == null)
             editedEntity.startDate = editedEntity.project?.startDate
         if (editedEntity.endDate == null)
             editedEntity.endDate = editedEntity.project?.endDate
+        if (!taskService!!.isNameCorrect(editedEntity.name) || !taskService!!.isDescriptionCorrect(editedEntity.description))
+            showIncorrectNameSizeExceptionWarning(event)
+        if (!taskService!!.isTimeRangeCorrect(editedEntity.startDate, editedEntity.endDate, editedEntity.project))
+            showIncorrectTimeRangeExceptionWarning(event)
     }
 
     private fun showIncorrectTimeRangeExceptionWarning(event: BeforeCommitChangesEvent) {

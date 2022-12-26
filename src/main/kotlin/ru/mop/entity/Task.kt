@@ -79,4 +79,8 @@ open class Task {
     @JoinColumn(name = "PROJECT_ID", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     var project: Project? = null
+
+    @Column(name = "DESCRIPTION")
+    @Lob
+    var description: String? = null
 }

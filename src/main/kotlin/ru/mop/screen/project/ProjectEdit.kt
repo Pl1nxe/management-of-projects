@@ -4,6 +4,7 @@ import io.jmix.core.Messages
 import io.jmix.ui.Notifications
 import io.jmix.ui.screen.*
 import org.springframework.beans.factory.annotation.Autowired
+import ru.mop.app.ProjectService
 import ru.mop.entity.Project
 
 @UiController("Project.edit")
@@ -12,21 +13,19 @@ import ru.mop.entity.Project
 class ProjectEdit : StandardEditor<Project>() {
 
     @Autowired
+    private var projectService: ProjectService? = null
+
+    @Autowired
     private var notifications: Notifications? = null
 
     @Autowired
     private val messages: Messages? = null
 
     @Subscribe
-    fun onBeforeCommitChanges(event: BeforeCommitChangesEvent) {
-        if (editedEntity.name != null) {
-            val name: String = editedEntity.name!!
-            if (name.isEmpty() || name.length > 200)
-                showIncorrectNameSizeExceptionWarning(event)
-        } else
+    private fun onBeforeCommitChanges(event: BeforeCommitChangesEvent) {
+        if (!projectService!!.isNameCorrect(editedEntity.name))
             showIncorrectNameSizeExceptionWarning(event)
-        if (editedEntity.startDate != null && editedEntity.endDate != null
-            && editedEntity.startDate?.isBefore(editedEntity.endDate) == false) {
+        if (projectService!!.isTimeRangeCorrect(editedEntity.startDate, editedEntity.endDate)) {
             showIncorrectTimeRangeExceptionWarning(event)
         }
     }
