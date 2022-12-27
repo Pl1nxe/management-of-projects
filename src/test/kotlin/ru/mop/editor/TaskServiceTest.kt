@@ -29,8 +29,7 @@ class TaskServiceTest {
                 LocalDateTime.of(LocalDate.of(2000, 1, 1), LocalTime.MIN),
                 LocalDateTime.of(LocalDate.of(2000, 1, 2), LocalTime.MIN),
                 LocalDateTime.of(LocalDate.of(2000, 1, 3), LocalTime.MIN),
-                LocalDateTime.of(LocalDate.of(2000, 1, 4), LocalTime.MIN)
-            )
+                LocalDateTime.of(LocalDate.of(2000, 1, 4), LocalTime.MIN))
         }
 
         @JvmStatic
@@ -234,27 +233,27 @@ class TaskServiceTest {
 
     @Test
     fun isNameCorrectTest() {
-        assertEquals(taskService!!.isNameCorrect(null), false)
+        assertEquals(false, taskService!!.isNameCorrect(null))
         var name = ""
-        assertEquals(taskService!!.isNameCorrect(name), false)
-        for (i in 1..50) name += " "
-        assertEquals(taskService!!.isNameCorrect(name), true)
-        for (i in 1..50) name += " "
-        assertEquals(taskService!!.isNameCorrect(name), true)
-        name += " "
-        assertEquals(taskService!!.isNameCorrect(name), false)
+        assertEquals(false, taskService!!.isNameCorrect(name))
+        for (i in 1..50) name += "a"
+        assertEquals(true, taskService!!.isNameCorrect(name))
+        for (i in 1..50) name += "a"
+        assertEquals(true, taskService!!.isNameCorrect(name))
+        name += "a"
+        assertEquals(false, taskService!!.isNameCorrect(name))
     }
 
     @Test
     fun isDescriptionCorrectTest() {
-        assertEquals(taskService!!.isDescriptionCorrect(null), true)
+        assertEquals(true, taskService!!.isDescriptionCorrect(null))
         var description = ""
-        assertEquals(taskService!!.isDescriptionCorrect(description), true)
-        for (i in 1..250) description += " "
-        assertEquals(taskService!!.isDescriptionCorrect(description), true)
-        for (i in 1..250) description += " "
-        assertEquals(taskService!!.isDescriptionCorrect(description), true)
-        description += " "
-        assertEquals(taskService!!.isDescriptionCorrect(description), false)
+        assertEquals(true, taskService!!.isDescriptionCorrect(description))
+        for (i in 1..250) description += "a"
+        assertEquals(true, taskService!!.isDescriptionCorrect(description))
+        for (i in 1..250) description += "a"
+        assertEquals(true, taskService!!.isDescriptionCorrect(description))
+        description += "a"
+        assertEquals(false, taskService!!.isDescriptionCorrect(description))
     }
 }

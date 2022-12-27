@@ -34,24 +34,24 @@ class ProjectServiceTest {
         val earlyDate = LocalDateTime.of(LocalDate.of(2000, 1, 1), LocalTime.MIN)
         val lateDate = LocalDateTime.of(LocalDate.of(2000, 1, 2), LocalTime.MIN)
 
-        assertEquals(projectService!!.isTimeRangeCorrect(null, null), true)
-        assertEquals(projectService!!.isTimeRangeCorrect(null, earlyDate), true)
-        assertEquals(projectService!!.isTimeRangeCorrect(earlyDate, null), true)
-        assertEquals(projectService!!.isTimeRangeCorrect(earlyDate, lateDate), true)
-        assertEquals(projectService!!.isTimeRangeCorrect(earlyDate, earlyDate), false)
-        assertEquals(projectService!!.isTimeRangeCorrect(lateDate, earlyDate), false)
+        assertEquals(true, projectService!!.isTimeRangeCorrect(null, null))
+        assertEquals( true, projectService!!.isTimeRangeCorrect(null, earlyDate))
+        assertEquals(true, projectService!!.isTimeRangeCorrect(earlyDate, null))
+        assertEquals(true, projectService!!.isTimeRangeCorrect(earlyDate, lateDate))
+        assertEquals(false, projectService!!.isTimeRangeCorrect(earlyDate, earlyDate))
+        assertEquals(false, projectService!!.isTimeRangeCorrect(lateDate, earlyDate))
     }
 
     @Test
     fun isNameCorrectTest() {
-        assertEquals(projectService!!.isNameCorrect(null), false)
+        assertEquals(false, projectService!!.isNameCorrect(null))
         var name = ""
-        assertEquals(projectService!!.isNameCorrect(name), false)
+        assertEquals(false, projectService!!.isNameCorrect(name))
         for (i in 1..50) name += " "
-        assertEquals(projectService!!.isNameCorrect(name), true)
+        assertEquals(true, projectService!!.isNameCorrect(name))
         for (i in 1..50) name += " "
-        assertEquals(projectService!!.isNameCorrect(name), true)
+        assertEquals(true, projectService!!.isNameCorrect(name))
         name += " "
-        assertEquals(projectService!!.isNameCorrect(name), false)
+        assertEquals(false, projectService!!.isNameCorrect(name))
     }
 }
