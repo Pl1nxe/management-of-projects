@@ -232,26 +232,53 @@ class TaskServiceTest {
     }
 
     @Test
-    fun isNameCorrectTest() {
+    fun testVariantWhenNameIsNull() {
         assertEquals(false, taskService!!.isNameCorrect(null))
+    }
+
+    @Test
+    fun testVariantWhenNameIsEmpty() {
+        assertEquals(false, taskService!!.isNameCorrect(""))
+    }
+
+    @Test
+    fun testNameLengthForIntermediateValues() {
         var name = ""
-        assertEquals(false, taskService!!.isNameCorrect(name))
         for (i in 1..50) name += "a"
         assertEquals(true, taskService!!.isNameCorrect(name))
-        for (i in 1..50) name += "a"
+    }
+
+    @Test
+    fun testNameLengthForBoundaryValues() {
+        var name = ""
+        for (i in 1..100) name += "a"
         assertEquals(true, taskService!!.isNameCorrect(name))
         name += "a"
         assertEquals(false, taskService!!.isNameCorrect(name))
     }
 
+
     @Test
-    fun isDescriptionCorrectTest() {
+    fun testVariantWhenDescriptionIsNull() {
         assertEquals(true, taskService!!.isDescriptionCorrect(null))
+    }
+
+    @Test
+    fun testVariantWhenDescriptionIsEmpty() {
+        assertEquals(true, taskService!!.isDescriptionCorrect(""))
+    }
+
+    @Test
+    fun testDescriptionLengthForIntermediateValues() {
         var description = ""
-        assertEquals(true, taskService!!.isDescriptionCorrect(description))
         for (i in 1..250) description += "a"
         assertEquals(true, taskService!!.isDescriptionCorrect(description))
-        for (i in 1..250) description += "a"
+    }
+
+    @Test
+    fun testDescriptionLengthForBoundaryValues() {
+        var description = ""
+        for (i in 1..500) description += "a"
         assertEquals(true, taskService!!.isDescriptionCorrect(description))
         description += "a"
         assertEquals(false, taskService!!.isDescriptionCorrect(description))

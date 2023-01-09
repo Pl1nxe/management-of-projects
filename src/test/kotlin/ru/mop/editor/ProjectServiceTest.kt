@@ -15,10 +15,14 @@ class ProjectServiceTest {
     companion object {
 
         private var projectService: ProjectService? = null
+        private var earlyDate: LocalDateTime? = null
+        private var lateDate: LocalDateTime? = null
 
         @JvmStatic
         @BeforeAll
         fun init() {
+            earlyDate = LocalDateTime.of(LocalDate.of(2000, 1, 1), LocalTime.MIN)
+            lateDate = LocalDateTime.of(LocalDate.of(2000, 1, 2), LocalTime.MIN)
             projectService = mock(ProjectService::class.java)
         }
 
@@ -26,32 +30,52 @@ class ProjectServiceTest {
         @AfterAll
         fun tearDown() {
             projectService = null
+            earlyDate = null
+            lateDate = null
         }
     }
 
     @Test
-    fun isTimeRangeCorrectTest() {
-        val earlyDate = LocalDateTime.of(LocalDate.of(2000, 1, 1), LocalTime.MIN)
-        val lateDate = LocalDateTime.of(LocalDate.of(2000, 1, 2), LocalTime.MIN)
-
+    fun testVariantsWhenSomeDateIsNull() {
         assertEquals(true, projectService!!.isTimeRangeCorrect(null, null))
-        assertEquals( true, projectService!!.isTimeRangeCorrect(null, earlyDate))
+        assertEquals(true, projectService!!.isTimeRangeCorrect(null, earlyDate))
         assertEquals(true, projectService!!.isTimeRangeCorrect(earlyDate, null))
-        assertEquals(true, projectService!!.isTimeRangeCorrect(earlyDate, lateDate))
+    }
+
+    @Test
+    fun testInvalidVariantsOfDateCombinations() {
         assertEquals(false, projectService!!.isTimeRangeCorrect(earlyDate, earlyDate))
         assertEquals(false, projectService!!.isTimeRangeCorrect(lateDate, earlyDate))
     }
 
     @Test
-    fun isNameCorrectTest() {
+    fun testValidVariantsOfDateCombinations() {
+        assertEquals(true, projectService!!.isTimeRangeCorrect(earlyDate, lateDate))
+    }
+
+    @Test
+    fun testVariantWhenNameIsNull() {
         assertEquals(false, projectService!!.isNameCorrect(null))
+    }
+
+    @Test
+    fun testVariantWhenNameIsEmpty() {
+        assertEquals(false, projectService!!.isNameCorrect(""))
+    }
+
+    @Test
+    fun testNameLengthForIntermediateValues() {
         var name = ""
-        assertEquals(false, projectService!!.isNameCorrect(name))
-        for (i in 1..50) name += " "
+        for (i in 1..50) name += "a"
         assertEquals(true, projectService!!.isNameCorrect(name))
-        for (i in 1..50) name += " "
+    }
+
+    @Test
+    fun testNameLengthForBoundaryValues() {
+        var name = ""
+        for (i in 1..100) name += "a"
         assertEquals(true, projectService!!.isNameCorrect(name))
-        name += " "
+        name += "a"
         assertEquals(false, projectService!!.isNameCorrect(name))
     }
 }
